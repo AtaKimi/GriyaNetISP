@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\DashbaordController as AdminDashboardController;
+use App\Http\Controllers\Sales\DashbaordController as SalesDashbaordController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -16,13 +18,20 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+Route::middleware('auth')->group(function () {
+    Route::get('/', function () {
+        if(auth()->user()){
+            redirect()->route('dashboard');
+        }
+    });
+
+    Route::middleware('role:admin')->prefix('admin')->controller(AdminDashboardController::class)->group(function () {
+        Route::get('/', 'index')->name('admin.dashboard');
+    });
+
+    Route::middleware('role:sales')->prefix('sales')->controller(SalesDashbaordController::class)->group(function () {
+        Route::get('/', 'index')->name('sales.dashboard');
+    });
 });
 
 Route::get('/dashboard', function () {
