@@ -15,18 +15,6 @@ class RoleSeeder extends Seeder
     {
         // create roles and assign existing permissions
         $role1 = Role::create(['name' => 'admin']);
-        $role2 = Role::create(['name' => 'sales']);
-
-        $user = \App\Models\User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@admin.com',
-        ]);
-        $user->assignRole($role1);
-
-        $user = \App\Models\User::factory()->create([
-            'name' => 'Sales User',
-            'email' => 'sales@sales.com',
-        ]);
-        $user->assignRole($role2);
+        $role2 = Role::create(['name' => 'agent']);
     }
 }
