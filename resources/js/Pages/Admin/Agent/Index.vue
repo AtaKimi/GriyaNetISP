@@ -7,6 +7,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Textarea from '@/Components/Textarea.vue';
 import Pagination from '@/Components/Pagination.vue';
+import TextInput from '@/Components/TextInput.vue';
 
 const form = useForm({
     name: '',
@@ -146,7 +147,7 @@ const deleteAgent = (id) => {
                         <div class="mb-4">
                             <InputLabel for="password_confirmation" value="Konfirmasi Password" />
 
-                            <Textarea id="password_confirmation" type="password" class="mt-1 block w-full p-2 border"
+                            <TextInput id="password_confirmation" type="password" class="mt-1 block w-full p-2 border"
                                 v-model="form.password_confirmation" required autocomplete="password_confirmation" />
 
                             <InputError class="mt-2" :message="form.errors.password_confirmation" />
