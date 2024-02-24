@@ -25,4 +25,13 @@ class Agent extends Model
     {
         return $this->hasMany(CustomerTransaction::class);
     }
+
+    public function validatedCustomerTransaction(): HasMany
+    {
+        return $this->hasMany(CustomerTransaction::class)->where('validated', '=', '1');
+    }
+
+    public function customers(): HasMany {
+        return $this->hasMany(Customer::class);
+    }
 }

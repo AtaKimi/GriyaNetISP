@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sales_packages', function (Blueprint $table) {
+        Schema::create('customer_transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('subtitle');
-            $table->longText('description');
-            $table->integer('price');
+            $table->foreignId('customer_id')->constrained('customers');
+            $table->foreignId('sales_package_id')->constrained('sales_packages');
+            $table->foreignId('agent_id')->constrained('agents');
+            $table->boolean('validated')->default(false);
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sales_packages');
+        Schema::dropIfExists('customer_transactions');
     }
 };

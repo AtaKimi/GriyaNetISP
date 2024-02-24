@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class SalesPackage extends Model implements HasMedia
+class Customer extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
     protected $fillable = [
-        'title',
-        'subtitle',
-        'description',
-        'price',
+        'name',
+        'address',
+        'phone_number',
+        'agent_id'
     ];
 }

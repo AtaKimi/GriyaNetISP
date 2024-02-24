@@ -11,7 +11,7 @@ class SalesPackageController extends Controller
 {
     public function index()
     {
-        $sales_packages = SalesPackage::with('media')->get();
+        $sales_packages = SalesPackage::with('media')->latest()->paginate(10);
         return Inertia::render('Admin/SalesPackage/Index', compact('sales_packages'));
     }
 
@@ -21,6 +21,7 @@ class SalesPackageController extends Controller
             'title' => 'required|string|max:255',
             'subtitle' => 'required|string|max:255',
             'description' => 'required|string',
+            'price' => 'required|integer',
             'image' => 'required|mimes:jpg,jpeg,png|max:1024',
         ]);
 
@@ -43,6 +44,7 @@ class SalesPackageController extends Controller
             'title' => 'required|string|max:255',
             'subtitle' => 'required|string|max:255',
             'description' => 'required|string',
+            'price' => 'required|integer',
             'image' => 'nullable|mimes:jpg,jpeg,png|max:1024',
         ]);
 

@@ -20,6 +20,7 @@ class SalesPackageFactory extends Factory
             'title' => fake()->sentence(),
             'subtitle' => fake()->sentence(),
             'description' => fake()->paragraph(),
+            'price' => fake()->numberBetween(1, 100) * 100000,
         ];
     }
 }

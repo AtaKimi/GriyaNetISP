@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Agent;
+use App\Models\CustomerTransaction;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 
@@ -15,5 +17,7 @@ use Illuminate\Support\Facades\Artisan;
 */
 
 Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
+    dd(
+        $agent_total_income = CustomerTransaction::where('validated', '=', '1')->with('salesPackage')->get()->first()->sum('salesPackage.price')
+    );
 })->purpose('Display an inspiring quote');

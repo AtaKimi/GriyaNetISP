@@ -12,7 +12,7 @@ class AgentController extends Controller
 {
     public function index()
     {
-        $agents = Agent::with('user')->get();
+        $agents = Agent::with('user')->latest()->paginate(10);
         return Inertia::render('Admin/Agent/Index', compact('agents'));
     }
 

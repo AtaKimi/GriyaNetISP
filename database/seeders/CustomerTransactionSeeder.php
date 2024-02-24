@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Agent;
+use App\Models\CustomerTransaction;
 use App\Models\SalesPackage;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -14,15 +15,18 @@ class CustomerTransactionSeeder extends Seeder
      */
     public function run(): void
     {
-        $agents = Agent::all();
-        $sales_package = SalesPackage::get()->random();
+        $agents = Agent::get();
+
         foreach ($agents as $agent) {
-            $agent->customerTransactions()->createMany(
-                \App\Models\CustomerTransaction::factory(5)->make(
-                    [
-                        'sales_package_id' => $sales_package->id
-                    ]
-                )->toArray()
+            $customers = $agent->customers;
+
+            $customer_transactions = $agent->customerTransactions()->createMany(
+                [
+                    CustomerTransaction::factory()->make([
+                        'customer_id' => $customers->random()->id,
+                        'sales_package_id' => SalesPackage::first()->id,
+                    ])->toArray(),
+                ]                
             );
         }
     }

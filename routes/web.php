@@ -5,9 +5,11 @@ use App\Http\Controllers\Admin\AgentController as AdminAgentController;
 use App\Http\Controllers\Admin\CustomerTransactionController as AdminCustomerTransactionController;
 use App\Http\Controllers\Admin\DashbaordController as AdminDashboardController;
 use App\Http\Controllers\Admin\SalesPackageController as AdminSalesPackageController;
-use App\Http\Controllers\Sales\DashbaordController as SalesDashbaordController;
+use App\Http\Controllers\Agent\CustomerController as AgentCustomerController;
+use App\Http\Controllers\Agent\CustomerTransactionController as AgentCustomerTransactionController;
+use App\Http\Controllers\Agent\DashboardController as AgentDashboardController;
+use App\Http\Controllers\Agent\SalesPackageController as AgentSalesPackageController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,8 +24,11 @@ use Inertia\Inertia;
 
 Route::middleware('auth')->group(function () {
     Route::get('/', function () {
-        if (auth()->user()) {
-            redirect()->route('dashboard');
+        $user = auth()->user();
+        if ($user->hasRole('admin')) {
+            return redirect()->route('admin.dashboard');
+        } else if ($user->hasRole('agent')) {
+            return redirect()->route('agent.dashboard');
         }
     });
 
@@ -42,23 +47,39 @@ Route::middleware('auth')->group(function () {
             Route::get('/', 'index')->name('admin.sales-package.index');
             Route::post('/', 'store')->name('admin.sales-package.store');
             Route::put('/{sales_package}/update', 'update')->name('admin.sales-package.update');
-            Route::delete('/{sales_package}/destory', 'destroy')->name('admin.sales-package.destroy');
+            Route::delete('/{sales_package}/destroy', 'destroy')->name('admin.sales-package.destroy');
         });
 
         Route::prefix('customer-transaction')->controller(AdminCustomerTransactionController::class)->group(function () {
-           Route::get('/', 'index')->name('admin.customer-transaction.index');
-           Route::delete('/{customer_transaction}/destory', 'destroy')->name('admin.customer-transaction.destroy');
+            Route::get('/', 'index')->name('admin.customer-transaction.index');
+            Route::put('/{customer_transaction}/update-validation', 'updateValidation')->name('admin.customer-transaction.update-validation');
+            Route::delete('/{customer_transaction}/destroy', 'destroy')->name('admin.customer-transaction.destroy');
         });
     });
 
-    Route::middleware('role:agent')->prefix('sales')->controller(SalesDashbaordController::class)->group(function () {
-        Route::get('/', 'index')->name('sales.dashboard');
+    Route::middleware('role:agent')->prefix('agent')->group(function () {
+
+        Route::controller(AgentDashboardController::class)->group(function () {
+            Route::get('/', 'index')->name('agent.dashboard');
+        });
+
+        Route::prefix('sales-package')->controller(AgentSalesPackageController::class)->group(function () {
+            Route::get('/', 'index')->name('agent.sales-package.index');
+        });
+
+        Route::prefix('customer-transaction')->controller(AgentCustomerTransactionController::class)->group(function () {
+            Route::get('/', 'index')->name('agent.customer-transaction.index');
+            Route::post('/', 'store')->name('agent.customer-transaction.store');
+        });
+
+        Route::prefix('customer')->controller(AgentCustomerController::class)->group(function () {
+            Route::get('/', 'index')->name('agent.customer.index');
+            Route::post('/', 'store')->name('agent.customer.store');
+            Route::put('/{customer}/update', 'update')->name('agent.customer.update');
+            Route::delete('/{customer}/destroy', 'destroy')->name('agent.customer.destroy');
+        });
     });
 });
-
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

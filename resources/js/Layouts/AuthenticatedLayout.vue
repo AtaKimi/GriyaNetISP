@@ -39,7 +39,7 @@ const showingNavigationDropdown = ref(false);
 
                             <template v-if="$page.props.auth.is_admin">
                                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                    <NavLink :href="route('admin.dashboard')" :active="route().current('dashboard')">
+                                    <NavLink :href="route('admin.dashboard')" :active="route().current('admin.dashboard')">
                                         Dashboard
                                     </NavLink>
                                 </div>
@@ -64,18 +64,27 @@ const showingNavigationDropdown = ref(false);
                                 </div>
                             </template>
 
-                            <!-- <template v-if="$page.props.auth.is_admin">
+                            <template v-if="$page.props.auth.is_agent">
                                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                    <NavLink :href="route('agent.dashboard')" :active="route().current('dashboard')">
+                                    <NavLink :href="route('agent.dashboard')" :active="route().current('agent.dashboard')">
                                         Dashboard
                                     </NavLink>
                                 </div>
+
                                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                    <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                        Dashboard
+                                    <NavLink :href="route('agent.sales-package.index')"
+                                        :active="route().current('agent.sales-package.index')">
+                                        Paket Penjualan
                                     </NavLink>
                                 </div>
-                            </template> -->
+
+                                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                    <NavLink :href="route('agent.customer-transaction.index')"
+                                        :active="route().current('agent.customer-transaction.index')">
+                                        Transaksi Kostumer
+                                    </NavLink>
+                                </div>
+                            </template>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -131,8 +140,28 @@ const showingNavigationDropdown = ref(false);
 
                 <!-- Responsive Navigation Menu -->
                 <div :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }" class="sm:hidden">
-                    <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                    <div class="pt-2 pb-3 space-y-1" v-if="$page.props.auth.is_admin">
+                        <ResponsiveNavLink :href="route('admin.dashboard')" :active="route().current('admin.dashboard')">
+                            Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('admin.agent.index')"
+                            :active="route().current('admin.agent.index')">
+                            Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('admin.sales-package.index')"
+                            :active="route().current('admin.sales-package.index')">
+                            Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('admin.customer-transaction.index')"
+                            :active="route().current('admin.customer-transaction.index')">
+                            Dashboard
+                        </ResponsiveNavLink>
+                    </div>
+                    <div class="pt-2 pb-3 space-y-1" v-else-if="$page.props.auth.is_agent">
+                        <ResponsiveNavLink :href="route('agent.dashboard')" :active="route().current('agent.dashboard')">
+                            Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('agent.dashboard')" :active="route().current('agent.dashboard')">
                             Dashboard
                         </ResponsiveNavLink>
                     </div>
@@ -168,5 +197,4 @@ const showingNavigationDropdown = ref(false);
                 <slot />
             </main>
         </div>
-    </div>
-</template>
+    </div></template>

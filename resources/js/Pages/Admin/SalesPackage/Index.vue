@@ -8,6 +8,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import Textarea from '@/Components/Textarea.vue';
 import FileInput from '@/Components/FileInput.vue';
+import Pagination from '@/Components/Pagination.vue';
 
 
 const props = defineProps({
@@ -33,12 +34,13 @@ const form = useForm({
     title: '',
     subtitle: '',
     description: '',
+    price: '',
     image: '',
 });
 
 const createSalesPackage = () => {
     form.post(route('admin.sales-package.store'), {
-        onSuccess: () => form.reset('title', 'subtitle', 'description', 'image'),
+        onSuccess: () => form.reset('title', 'subtitle', 'price', 'description', 'image'),
     })
 }
 
@@ -47,6 +49,7 @@ const editSalesPackage = (sales_package) => {
     form.title = sales_package.title
     form.subtitle = sales_package.subtitle
     form.description = sales_package.description
+    form.price = sales_package.price
 }
 
 const updateSalesPackage = (sales_package_id) => {
@@ -55,6 +58,7 @@ const updateSalesPackage = (sales_package_id) => {
         image: form.image,
         title: form.title,
         subtitle: form.subtitle,
+        price: form.price,
         description: form.description,
     })
 }
@@ -86,7 +90,7 @@ const destroySalesPackage = (sales_package_id) => {
                                 class="border-2 border-blue-500 rounded-md px-5 py-2.5 text-blue-900 font-bold tracking-wide hover:bg-blue-500 hover:text-white">Tambah</button>
                         </div>
                         <div class="flex flex-col gap-4">
-                            <div v-for="sales_package in $page.props.sales_packages"
+                            <div v-for="sales_package in $page.props.sales_packages.data"
                                 class="rounded-md border border-grey-400 shadow w-full p-4 flex gap-4 items-start">
                                 <div>
                                     <img v-bind:src="sales_package.media[0].original_url" alt="Foto Paket Penjualan"
@@ -105,7 +109,8 @@ const destroySalesPackage = (sales_package_id) => {
                                                         d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z" />
                                                 </svg>
                                             </button>
-                                            <button @click="isDeleteModalOpen = !isDeleteModalOpen; sales_package_id = sales_package.id"
+                                            <button
+                                                @click="isDeleteModalOpen = !isDeleteModalOpen; sales_package_id = sales_package.id"
                                                 class="bg-red-500 fill-white w-10 h-10 flex justify-center items-center rounded-md">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="24"
                                                     height="24">
@@ -116,10 +121,20 @@ const destroySalesPackage = (sales_package_id) => {
                                         </div>
                                     </div>
                                     <h1 class="text-xl font-medium text-gray-500 mb-2">{{ sales_package.subtitle }}</h1>
+                                    <p class="text-md font-bold ">Harga:
+                                        <span>
+                                            {{ new Intl.NumberFormat('id-ID', {
+                                                style: 'currency', currency: 'IDR'
+                                            }).format(
+                                                sales_package.price,
+                                            ) }}
+                                        </span>
+                                    </p>
                                     <p class="text-sm">{{ sales_package.description }}</p>
                                 </div>
                             </div>
                         </div>
+                        <Pagination :links="$page.props.sales_packages.links"/>
                     </div>
                 </div>
             </div>
@@ -147,7 +162,7 @@ const destroySalesPackage = (sales_package_id) => {
                         </div>
 
                         <div class="mb-4">
-                            <InputLabel for="title" value="Judul" />
+                            <InputLabel for="title" value="text" />
                             <TextInput id="title" type="title" class="mt-1 block w-full p-2 border" v-model="form.title"
                                 required autofocus autocomplete="title" />
                             <InputError class="mt-2" :message="form.errors.title" />
@@ -156,15 +171,23 @@ const destroySalesPackage = (sales_package_id) => {
                         <div class="mb-4">
                             <InputLabel for="subtitle" value="Subjudul" />
 
-                            <TextInput id="subtitle" type="subtitle" class="mt-1 block w-full p-2 border"
+                            <TextInput id="subtitle" type="text" class="mt-1 block w-full p-2 border"
                                 v-model="form.subtitle" required autofocus autocomplete="subtitle" />
                             <InputError class="mt-2" :message="form.errors.subtitle" />
                         </div>
 
                         <div class="mb-4">
+                            <InputLabel for="price" value="Harga" />
+
+                            <TextInput id="price" type="number" class="mt-1 block w-full p-2 border" v-model="form.price"
+                                required autofocus autocomplete="price" />
+                            <InputError class="mt-2" :message="form.errors.price" />
+                        </div>
+
+                        <div class="mb-4">
                             <InputLabel for="description" value="Deskripsi" />
-                            <Textarea id="description" type="description" class="mt-1 block w-full p-2 border"
-                                v-model="form.description" required autofocus autocomplete="description" />
+                            <Textarea id="description" class="mt-1 block w-full p-2 border" v-model="form.description"
+                                required autofocus autocomplete="description" />
                             <InputError class="mt-2" :message="form.errors.description" />
                         </div>
 
@@ -215,6 +238,14 @@ const destroySalesPackage = (sales_package_id) => {
                             <TextInput id="subtitle" type="subtitle" class="mt-1 block w-full p-2 border"
                                 v-model="form.subtitle" required autofocus autocomplete="subtitle" />
                             <InputError class="mt-2" :message="form.errors.subtitle" />
+                        </div>
+
+                        <div class="mb-4">
+                            <InputLabel for="price" value="Harga" />
+
+                            <TextInput id="price" type="number" class="mt-1 block w-full p-2 border" v-model="form.price"
+                                required autofocus autocomplete="price" />
+                            <InputError class="mt-2" :message="form.errors.price" />
                         </div>
 
                         <div class="mb-4">

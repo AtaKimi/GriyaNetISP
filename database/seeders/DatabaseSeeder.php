@@ -17,12 +17,14 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             AgentSeeder::class,
             SalesPackageSeeder::class,
+            CustomerSeeder::class,
             CustomerTransactionSeeder::class,
 
             //media seeder
             DeleteMediaSeeder::class,
             SalesPackageMediaSeeder::class,
             CustomerTransactionMediaSeeder::class,
+            CustomerMediaSeeder::class,
         ]);
     }
 }

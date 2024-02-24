@@ -6,6 +6,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Textarea from '@/Components/Textarea.vue';
+import Pagination from '@/Components/Pagination.vue';
 
 const form = useForm({
     name: '',
@@ -72,7 +73,7 @@ const deleteAgent = (id) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="agent in $page.props.agents" class="even:bg-slate-200">
+                                    <tr v-for="agent in $page.props.agents.data" class="even:bg-slate-200">
                                         <td class="py-3 px-3">{{ agent.user.name }}</td>
                                         <td class="py-3 px-3 text-center">{{ agent.nip }}</td>
                                         <td class="py-3 px-3">
@@ -86,6 +87,7 @@ const deleteAgent = (id) => {
                                 </tbody>
                             </table>
                         </div>
+                        <Pagination :links="$page.props.agents.links" />
                     </div>
                 </div>
             </div>

@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CustomerTransaction>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Customer>
  */
-class CustomerTransactionFactory extends Factory
+class CustomerFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,9 @@ class CustomerTransactionFactory extends Factory
     public function definition(): array
     {
         return [
-            'validated' => fake()->boolean(70),
+            'name' => fake()->name(),
+            'phone_number' => fake()->phoneNumber(),
+            'address' => fake()->address(),
         ];
     }
 }

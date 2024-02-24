@@ -24,6 +24,8 @@ class AgentSeeder extends Seeder
 
         $user->assignRole($role_agent);
 
+        $agent = Agent::factory()->count(1)->for($user)->create();
+
         $users = User::factory(10)->create();
         
         foreach ($users as $user) {
