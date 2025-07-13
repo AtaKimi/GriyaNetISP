@@ -27,17 +27,6 @@ This project was built using the following technologies:
 * **Development Tool:** Vite
 * **Version Control:** Git
 
-## Screenshots
-
-**Dashboard Overview**
-*(Replace this with a screenshot of your dashboard page)*
-
-**Customer Management Page**
-*(Replace this with a screenshot of the customer data table)*
-
-**Billing Management Page**
-*(Replace this with a screenshot of the monthly billing page)*
-
 ## Installation and Setup
 
 To run this project locally, follow these steps:
